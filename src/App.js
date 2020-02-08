@@ -8,6 +8,7 @@ import MenuIcon from '@material-ui/icons/SentimentSatisfiedAlt';
 import MenuView from '@material-ui/icons/Edit';
 import MenuList from '@material-ui/icons/List';
 import SubmittedFormList from "./Components/SubmittedFormList";
+import { withCookies, Cookies } from 'react-cookie';
 
 
 import {
@@ -58,7 +59,7 @@ class App extends React.Component {
 
                 <Container>
 
-                    <ButtonAppBar icon="shit"/>
+                    <ButtonAppBar icon="Admin Panel"/>
                     <Container>
                         {/*<Box style={this.center} my={8}>*/}
                         {/*  <Typography variant="h4" component="h1" gutterBottom>*/}
@@ -132,4 +133,4 @@ class App extends React.Component {
 // );
 // }
 
-export default App;
+export default withCookies(App);

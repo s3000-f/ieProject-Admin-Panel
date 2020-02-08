@@ -6,18 +6,32 @@ import {server, formsList} from '../Utils/Constants'
 import {
     withRouter
 } from "react-router";
+import { withCookies, Cookies } from 'react-cookie';
+import {instanceOf} from "prop-types";
 
 class SubmittedFormList extends Component {
-    constructor() {
-        super();
-        this.state = {}
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+    constructor(props) {
+        super(props);
+
+        const { cookies } = props;
+        this.state = {
+            token: cookies.get('token') || 'Ben'
+        };
     }
 
     componentDidMount() {
         let {id} = this.props.match.params
         let url = server + formsList + `/${id}/list`
         console.log(url)
-        fetch(url)
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'x-access-token': this.state.token
+            }
+        })
             .then(response => response.json())
             .then(data => this.setState({'data': data}));
     }
@@ -74,4 +88,4 @@ class SubmittedFormList extends Component {
     }
 }
 
-export default withRouter(SubmittedFormList)
+export default withCookies(withRouter(SubmittedFormList))

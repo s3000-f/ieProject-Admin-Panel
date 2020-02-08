@@ -21,17 +21,24 @@ import {
 } from 'antd';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import {server, formsList} from "../Utils/Constants";
+import { withCookies, Cookies } from 'react-cookie';
+import {instanceOf} from "prop-types";
 
 const {Option} = Select
 
 class Asdsd extends Component {
-    constructor() {
-        super();
-        this.state = {
-            formItems: []
-        }
-    }
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+    constructor(props) {
+        super(props);
 
+        const { cookies } = props;
+        this.state = {
+            token: cookies.get('token') || 'Ben',
+            formItems: []
+        };
+    }
     /*
         handleSubmit = e => {
             e.preventDefault();
@@ -80,7 +87,12 @@ class Asdsd extends Component {
         let {id, vid} = this.props.match.params
         let url = server + formsList + `/${id}/list/${vid}`
         console.log(url)
-        fetch(url)
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'x-access-token': this.state.token
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 this.setState({form: data})
@@ -158,7 +170,7 @@ const mapWrapper = GoogleApiWrapper({
 })(Asdsd)
 const SubmittedViewForm = Form.create({name: 'validate_other'})(mapWrapper);
 
-export default withRouter(SubmittedViewForm)
+export default withCookies(withRouter(SubmittedViewForm))
 
 
 
