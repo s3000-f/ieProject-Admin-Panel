@@ -39,49 +39,12 @@ class Asdsd extends Component {
             formItems: []
         };
     }
-    /*
-        handleSubmit = e => {
-            e.preventDefault();
-            this.props.form.validateFields((err, values) => {
-                if (!err) {
-                    console.log('Received values of form: ', values);
-                    let {id} = this.props.match.params
-                    fetch(`http://localhost:3002/api/forms/${id}`, {
-                        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                        mode: 'no-cors', // no-cors, *cors, same-origin
-                        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                        credentials: 'same-origin', // include, *same-origin, omit
-                        headers: {
-                            'Content-Type': 'application/json'
-                            // 'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        redirect: 'follow', // manual, *follow, error
-                        referrerPolicy: 'no-referrer', // no-referrer, *client
-                        body: JSON.stringify(values) // body data type must match "Content-Type" header
-                    }).then(r => console.log(r));
-                }
-            });
-        };
-    */
 
-    /*normFile = e => {
-        console.log('Upload event:', e);
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e && e.fileList;
-    };
-    handleChange = (date, dateString) => {
-        console.log(date, dateString);
-
+    csvButton = e => {
+        let {id, vid} = this.props.match.params
+        let url = server + formsList + `/${id}/list/${vid}/csv`
+        window.open(url, "_blank")
     }
-    handleSelect = (value) => {
-        console.log(`selected ${value}`);
-        this.setState({selectedShit: value})
-    }
-    onChangeNum = (value) => {
-        console.log(value)
-    }*/
 
     componentWillMount() {
         let {id, vid} = this.props.match.params
@@ -105,8 +68,12 @@ class Asdsd extends Component {
         const {getFieldDecorator} = this.props.form;
         let fields = this.state.form.fields
         var items = []
+        var numericSum = 0
         for (let i in fields) {
             let item = fields[i]
+            if (item.type === 'Number') {
+                numericSum += parseInt(item.value, 10)
+            }
             if (item.type === 'Location') {
                 const style = {
                     width: '400px',
@@ -125,6 +92,8 @@ class Asdsd extends Component {
                     position={{lat: sumlat, lng: sumlng}}/>);
                 items.push(
                     <Row key={item.name} style={{height: 450}}>
+                        <span>{item.title}:</span>
+                        <br/>
                         <Map initialCenter={{lat: sumlat, lng: sumlng}} google={this.props.google} style={style}
                              zoom={5}>
                             {ops}
@@ -152,7 +121,7 @@ class Asdsd extends Component {
 
             }
         }
-        this.setState({formItems: items})
+        this.setState({formItems: items, sum: numericSum})
         return items
     }
 
@@ -160,6 +129,21 @@ class Asdsd extends Component {
         return (
             <div>
                 {this.state.formItems}
+                <Row>
+                    <div style={{borderColor: "grey", borderStyle: "solid", borderWidth: "1px", borderRadius: "20px", padding: "10px", margin: "10px"}}>
+                                <span>
+                                    Sum Of Numeric Fields:
+                                </span>
+                        <span>
+                                    &nbsp; {this.state.sum}
+                                </span>
+                    </div>
+                </Row>
+                <Row style={{margin: "20px"}}>
+                    <Button onClick={this.csvButton}>
+                        Get CSV
+                    </Button>
+                </Row>
             </div>
         )
     }

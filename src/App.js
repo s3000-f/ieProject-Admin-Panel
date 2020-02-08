@@ -28,7 +28,6 @@ class App extends React.Component {
         super();
         this.state = {
             icon: MenuIcon
-
         }
         this.swap = this.swap.bind(this)
     }
@@ -54,11 +53,8 @@ class App extends React.Component {
 
     render() {
         return (
-
             <Router>
-
                 <Container>
-
                     <ButtonAppBar icon="Admin Panel"/>
                     <Container>
                         {/*<Box style={this.center} my={8}>*/}

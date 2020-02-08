@@ -51,7 +51,6 @@ class SubmittedFormList extends Component {
                 .then(data => {
                     console.log(data)
                     if (data.result === "ok"){
-
                         let dat = []
                         this.state.data.forEach(item => {
                             if (item["_id"] !== eid) {

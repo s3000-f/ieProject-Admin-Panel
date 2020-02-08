@@ -20,6 +20,7 @@ class Soosk extends Component {
             token: cookies.get('token') || 'Ben'
         };
     }
+
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
